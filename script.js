@@ -1,6 +1,6 @@
 /* ============================================
-   MIMBRE RECORDS - GEOMETRIC ANIMATION V2
-   Geometría andina animada - Ciclo infinito con reset suave
+   MIMBRE RECORDS - GEOMETRIC ANIMATION V3
+   Geometría andina animada - Velocidades corregidas
    ============================================ */
 
 // Configuración del canvas
@@ -11,8 +11,6 @@ const ctx = canvas.getContext('2d');
 let width, height;
 let animationFrame;
 let time = 0;
-const CYCLE_DURATION = 5000; // 5000 frames ≈ 83 segundos a 60fps
-const RESET_DURATION = 200; // 200 frames para reset suave ≈ 3.3 seg
 
 // Paleta de colores (grises + ocre)
 const colors = {
@@ -30,21 +28,20 @@ function resizeCanvas() {
     height = canvas.height = window.innerHeight;
 }
 
-// Clase para líneas geométricas horizontales (SIEMPRE VISIBLES)
+// Clase para líneas geométricas horizontales
 class HorizontalBand {
-    constructor(y, width, color, speed) {
+    constructor(y, color, speed) {
         this.baseY = y;
         this.y = y;
-        this.width = width;
         this.color = color;
         this.speed = speed;
         this.offset = Math.random() * Math.PI * 2;
-        this.amplitude = 3; // Oscilación máxima en píxeles
+        this.amplitude = 5;
     }
     
     update(time) {
-        // Movimiento ondulatorio contenido (nunca sale)
-        this.y = this.baseY + Math.sin(time * this.speed + this.offset) * this.amplitude;
+        // Movimiento ondulatorio visible pero sutil
+        this.y = this.baseY + Math.sin((time + this.offset) * this.speed) * this.amplitude;
     }
     
     draw() {
@@ -52,69 +49,36 @@ class HorizontalBand {
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(0, this.y);
-        ctx.lineTo(this.width, this.y);
+        ctx.lineTo(width, this.y);
         ctx.stroke();
-    }
-    
-    reset() {
-        // No necesita reset, siempre está en rango
     }
 }
 
-// Clase para triángulos geométricos andinos (CON RESET SUAVE)
+// Clase para triángulos geométricos
 class Triangle {
     constructor(x, y, size, color, speed) {
-        this.initialX = x;
-        this.initialY = y;
         this.baseX = x;
         this.baseY = y;
         this.x = x;
         this.y = y;
-        this.initialSize = size;
+        this.baseSize = size;
         this.size = size;
         this.color = color;
         this.speed = speed;
         this.offset = Math.random() * Math.PI * 2;
         this.rotation = 0;
-        this.isResetting = false;
-        this.resetProgress = 0;
     }
     
-    update(time, cycleProgress) {
-        if (this.isResetting) {
-            // Reset suave hacia posición inicial
-            this.resetProgress += 1 / RESET_DURATION;
-            
-            if (this.resetProgress >= 1) {
-                this.isResetting = false;
-                this.resetProgress = 0;
-                this.baseX = this.initialX;
-                this.baseY = this.initialY;
-                this.size = this.initialSize;
-                this.rotation = 0;
-            } else {
-                // Interpolación suave (ease-out)
-                const easeProgress = 1 - Math.pow(1 - this.resetProgress, 3);
-                this.x = this.baseX + (this.initialX - this.baseX) * easeProgress;
-                this.y = this.baseY + (this.initialY - this.baseY) * easeProgress;
-                this.size = this.size + (this.initialSize - this.size) * easeProgress;
-                this.rotation = this.rotation * (1 - easeProgress);
-            }
-        } else {
-            // Movimiento normal contenido
-            const breathe = Math.sin(time * this.speed + this.offset) * 0.08;
-            this.size = this.initialSize * (1 + breathe);
-            this.rotation = Math.sin(time * this.speed * 0.5 + this.offset) * 0.03;
-            
-            // Desplazamiento vertical muy contenido
-            this.y = this.baseY + Math.sin(time * this.speed + this.offset) * 8;
-            
-            // Trigger reset cuando ciclo completa
-            if (cycleProgress > 0.95) {
-                this.isResetting = true;
-                this.resetProgress = 0;
-            }
-        }
+    update(time) {
+        // Breathing effect (tamaño)
+        const breathe = Math.sin((time + this.offset) * this.speed * 0.8);
+        this.size = this.baseSize * (1 + breathe * 0.15);
+        
+        // Rotación sutil
+        this.rotation = Math.sin((time + this.offset * 2) * this.speed * 0.5) * 0.1;
+        
+        // Movimiento vertical contenido
+        this.y = this.baseY + Math.sin((time + this.offset) * this.speed) * 10;
     }
     
     draw() {
@@ -126,7 +90,7 @@ class Triangle {
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         
-        // Triángulo apuntando arriba
+        // Triángulo
         ctx.moveTo(0, -this.size);
         ctx.lineTo(-this.size * 0.866, this.size * 0.5);
         ctx.lineTo(this.size * 0.866, this.size * 0.5);
@@ -137,11 +101,9 @@ class Triangle {
     }
 }
 
-// Clase para patrones escalonados (CON RESET SUAVE)
+// Clase para patrones escalonados
 class SteppedPattern {
     constructor(x, y, steps, stepSize, color, speed) {
-        this.initialX = x;
-        this.initialY = y;
         this.x = x;
         this.baseY = y;
         this.y = y;
@@ -150,30 +112,11 @@ class SteppedPattern {
         this.color = color;
         this.speed = speed;
         this.offset = Math.random() * Math.PI * 2;
-        this.isResetting = false;
-        this.resetProgress = 0;
     }
     
-    update(time, cycleProgress) {
-        if (this.isResetting) {
-            this.resetProgress += 1 / RESET_DURATION;
-            
-            if (this.resetProgress >= 1) {
-                this.isResetting = false;
-                this.resetProgress = 0;
-                this.baseY = this.initialY;
-            } else {
-                const easeProgress = 1 - Math.pow(1 - this.resetProgress, 3);
-                this.y = this.baseY + (this.initialY - this.baseY) * easeProgress;
-            }
-        } else {
-            this.y = this.baseY + Math.sin(time * this.speed + this.offset) * 6;
-            
-            if (cycleProgress > 0.95) {
-                this.isResetting = true;
-                this.resetProgress = 0;
-            }
-        }
+    update(time) {
+        // Movimiento vertical suave
+        this.y = this.baseY + Math.sin((time + this.offset) * this.speed) * 8;
     }
     
     draw() {
@@ -208,36 +151,43 @@ function initGeometry() {
     triangles = [];
     steppedPatterns = [];
     
-    // Crear bandas horizontales (4 bandas siempre visibles)
+    // Crear bandas horizontales (4 bandas)
     const numBands = 4;
+    const bandColors = [colors.gray1, colors.gray2, colors.white, colors.ocre1];
+    
     for (let i = 0; i < numBands; i++) {
         const y = (height / (numBands + 1)) * (i + 1);
-        const colorKeys = Object.keys(colors);
-        const randomColor = colors[colorKeys[Math.floor(Math.random() * colorKeys.length)]];
-        horizontalBands.push(new HorizontalBand(y, width, randomColor, 0.0003 + Math.random() * 0.0002));
+        const speed = 0.015 + Math.random() * 0.01;
+        horizontalBands.push(new HorizontalBand(y, bandColors[i], speed));
     }
     
     // Crear triángulos distribuidos (8 triángulos)
     const numTriangles = 8;
+    const triangleColors = [colors.gray1, colors.gray2, colors.ocre1, colors.white];
+    
     for (let i = 0; i < numTriangles; i++) {
         const x = (width / (numTriangles + 1)) * (i + 1) + (Math.random() - 0.5) * 100;
-        const y = height * 0.2 + Math.random() * height * 0.6; // Mantener en zona central
-        const size = 15 + Math.random() * 25;
-        const colorKeys = ['gray1', 'gray2', 'ocre1', 'white'];
-        const randomColor = colors[colorKeys[Math.floor(Math.random() * colorKeys.length)]];
-        triangles.push(new Triangle(x, y, size, randomColor, 0.0002 + Math.random() * 0.0003));
+        const y = height * 0.25 + Math.random() * height * 0.5;
+        const size = 15 + Math.random() * 20;
+        const color = triangleColors[Math.floor(Math.random() * triangleColors.length)];
+        const speed = 0.012 + Math.random() * 0.008;
+        
+        triangles.push(new Triangle(x, y, size, color, speed));
     }
     
     // Crear patrones escalonados (3 patrones)
     const numPatterns = 3;
+    const patternColors = [colors.gray3, colors.ocre2, colors.white];
+    
     for (let i = 0; i < numPatterns; i++) {
-        const x = Math.random() * width * 0.3;
+        const x = (width * 0.1) + Math.random() * (width * 0.2);
         const y = (height / (numPatterns + 1)) * (i + 1);
-        const steps = 3 + Math.floor(Math.random() * 4);
-        const stepSize = 20 + Math.random() * 15;
-        const colorKeys = ['gray3', 'ocre2', 'white'];
-        const randomColor = colors[colorKeys[Math.floor(Math.random() * colorKeys.length)]];
-        steppedPatterns.push(new SteppedPattern(x, y, steps, stepSize, randomColor, 0.0004 + Math.random() * 0.0002));
+        const steps = 3 + Math.floor(Math.random() * 3);
+        const stepSize = 18 + Math.random() * 12;
+        const color = patternColors[i % patternColors.length];
+        const speed = 0.018 + Math.random() * 0.01;
+        
+        steppedPatterns.push(new SteppedPattern(x, y, steps, stepSize, color, speed));
     }
 }
 
@@ -246,32 +196,24 @@ function animate() {
     // Limpiar canvas
     ctx.clearRect(0, 0, width, height);
     
-    // Incrementar tiempo
-    time += 1;
+    // Incrementar tiempo (60fps = 60 increments por segundo)
+    time += 0.016; // ~1/60 para normalizar
     
-    // Calcular progreso del ciclo (0 a 1)
-    const cycleProgress = (time % CYCLE_DURATION) / CYCLE_DURATION;
-    
-    // Reset del ciclo completo
-    if (time % CYCLE_DURATION === 0 && time > 0) {
-        // Ciclo completo, elementos con reset se regenerarán
-    }
-    
-    // Actualizar y dibujar bandas horizontales (siempre visibles)
+    // Actualizar y dibujar bandas horizontales
     horizontalBands.forEach(band => {
         band.update(time);
         band.draw();
     });
     
-    // Actualizar y dibujar triángulos (con reset)
+    // Actualizar y dibujar triángulos
     triangles.forEach(triangle => {
-        triangle.update(time, cycleProgress);
+        triangle.update(time);
         triangle.draw();
     });
     
-    // Actualizar y dibujar patrones escalonados (con reset)
+    // Actualizar y dibujar patrones escalonados
     steppedPatterns.forEach(pattern => {
-        pattern.update(time, cycleProgress);
+        pattern.update(time);
         pattern.draw();
     });
     
@@ -290,7 +232,6 @@ function init() {
 window.addEventListener('resize', () => {
     resizeCanvas();
     initGeometry();
-    time = 0; // Reset time en resize
 });
 
 // Pausar animación si la pestaña no está visible
