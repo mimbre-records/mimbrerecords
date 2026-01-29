@@ -1,0 +1,330 @@
+/* ============================================
+   MIMBRE RECORDS - STYLESHEET
+   Paleta: Grises urbanos + Negro/Blanco + Ocre
+   ============================================ */
+
+/* === RESET Y BASE === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* === CANVAS DE FONDO (GEOMETRÍA ANIMADA) === */
+#geometric-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+/* === TEXTURA URBANA (CSS PROCEDURAL) === */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background-color: #2a2a2a;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.03) 2px,
+            rgba(255, 255, 255, 0.03) 4px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.03) 2px,
+            rgba(255, 255, 255, 0.03) 4px
+        );
+    background-size: 50px 50px;
+}
+
+/* === CONTENEDOR PRINCIPAL === */
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+    min-height: 100vh;
+}
+
+/* === HEADER: LOGO MIMBRE RECORDS === */
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-main {
+    width: 120px;
+    height: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+}
+
+.logo-main:hover {
+    transform: scale(1.05);
+}
+
+/* === SECCIÓN: IDENTIDAD === */
+.identity {
+    text-align: center;
+    width: 100%;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #ffffff;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: #d4a574;
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+}
+
+.description {
+    font-size: 0.95rem;
+    color: #8a8a8a;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+}
+
+/* === SECCIÓN: RELEASE (VÍA LUMA) === */
+.release {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.release-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-artist {
+    width: 80px;
+    height: auto;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+}
+
+.release-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+/* === ÁLBUM === */
+.album {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.album-cover {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.album-cover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.album-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+}
+
+/* === SPOTIFY PLACEHOLDER === */
+.spotify-placeholder {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.placeholder-text {
+    font-size: 1rem;
+    color: #8a8a8a;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+}
+
+/* Cuando agregues el iframe de Spotify, este estilo lo centra */
+#spotify-embed iframe {
+    border-radius: 12px;
+}
+
+/* === MÉTRICAS COSMOSEMIÓTICAS === */
+.metrics {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.metrics-text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #b8860b;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+}
+
+/* === FOOTER: REDES SOCIALES === */
+.footer {
+    width: 100%;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.social-link {
+    display: inline-block;
+    font-size: 1rem;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.social-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #d4a574;
+    color: #d4a574;
+    transform: translateY(-2px);
+}
+
+/* === RESPONSIVE: MÓVIL === */
+@media (max-width: 768px) {
+    .container {
+        padding: 40px 15px;
+        gap: 40px;
+    }
+    
+    .logo-main {
+        width: 100px;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .release-title {
+        font-size: 1.5rem;
+    }
+    
+    .album-title {
+        font-size: 1.25rem;
+    }
+    
+    .album {
+        max-width: 320px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.75rem;
+        letter-spacing: 0.1em;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .release-title {
+        font-size: 1.25rem;
+    }
+    
+    .metrics-text {
+        font-size: 0.8rem;
+    }
+}
+
+/* === ANIMACIÓN SUTIL DE ENTRADA === */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header,
+.identity,
+.release,
+.metrics,
+.footer {
+    animation: fadeInUp 0.8s ease-out backwards;
+}
+
+.identity { animation-delay: 0.1s; }
+.release { animation-delay: 0.2s; }
+.metrics { animation-delay: 0.3s; }
+.footer { animation-delay: 0.4s; }
