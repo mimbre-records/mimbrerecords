@@ -206,9 +206,55 @@ body::before {
     letter-spacing: 0.05em;
 }
 
-/* Cuando agregues el iframe de Spotify, este estilo lo centra */
-#spotify-embed iframe {
+.promo-image-wrap {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto 1rem;
     border-radius: 12px;
+    overflow: hidden;
+}
+
+.promo-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+}
+
+.release-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.share-button {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: inherit;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.share-button:hover {
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.35);
+}
+
+.contact-email {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.contact-email a {
+    color: inherit;
+    text-decoration: underline;
+}
 }
 
 /* === MÉTRICAS COSMOSEMIÓTICAS === */
