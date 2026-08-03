@@ -1,140 +1,387 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mimbre Records - Transmisión colectiva de frecuencias urbanas.">
-    <meta name="keywords" content="Mimbre Records, Vía Luma, Alto Ruido, música urbana chilena, trap, cosmosemiótica">
-    <meta name="author" content="Mimbre Records">
+/* =============================
+   MIMBRE RECORDS - STYLESHEET
+   Paleta: Grises urbanos + Negro/Blanco + Ocre
+   ============================= */
 
-    <meta property="og:title" content="Mimbre Records">
-    <meta property="og:description" content="Transmisión colectiva de frecuencias urbanas">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://mimbrerecords.cl">
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    <title>Mimbre Records</title>
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
 
-    <link rel="stylesheet" href="style.css">
-</head>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
 
-<body>
-    <canvas id="geometric-canvas"></canvas>
+#geometric-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.3;
+}
 
-    <main class="container">
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background-color: #2a2a2a;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.03) 2px,
+            rgba(255, 255, 255, 0.03) 4px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.03) 2px,
+            rgba(255, 255, 255, 0.03) 4px
+        );
+    background-size: 50px 50px;
+}
 
-        <header class="header">
-            <img src="assets/MM-logo.png" alt="Mimbre Records Logo" class="logo-main">
-        </header>
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+    min-height: 100vh;
+}
 
-        <section class="identity">
-            <h1 class="title">MIMBRE RECORDS</h1>
-            <p class="subtitle">Transmisión colectiva</p>
-        </section>
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-        <section class="release">
-            <div class="release-header">
-                <h2 class="release-title">Discografía</h2>
-            </div>
+.logo-main {
+    width: 120px;
+    height: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+}
 
-            <div class="album">
-                <img src="assets/VL-AR-album.png" alt="Alto Ruido - Portada" class="album-cover">
-                <h3 class="album-title">VÍA LUMA - Alto Ruido</h3>
-            </div>
+.logo-main:hover {
+    transform: scale(1.05);
+}
 
-            <!-- Imagen promo sobre el embed -->
-            <div class="promo-image-wrap">
-                <img src="assets/imagen-alto-ruido-concreto.png" alt="Alto Ruido - Promo" class="promo-image">
-            </div>
+.identity {
+    text-align: center;
+    width: 100%;
+}
 
-            <!-- Spotify embed -->
-            <div id="spotify-embed" class="spotify-embed">
-                <iframe
-                    data-testid="embed-iframe"
-                    style="border-radius:12px"
-                    src="https://open.spotify.com/embed/artist/6UHhm198iprKdfDYM6poIf?utm_source=generator&theme=0&si=eed9112bffdc47ad"
-                    width="100%"
-                    height="352"
-                    frameborder="0"
-                    allowfullscreen=""
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy">
-                </iframe>
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #ffffff;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
 
-                <div class="release-links">
-                    <a href="https://open.spotify.com/artist/6UHhm198iprKdfDYM6poIf?si=y51wFvBURNeQi3a_nKCDkA"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="social-link spotify-link"
-                       aria-label="Escuchar Vía Luma en Spotify">
-                        Escuchar en Spotify
-                    </a>
+.subtitle {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: #d4a574;
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+}
 
-                    <button
-                        type="button"
-                        class="share-button"
-                        id="share-spotify-btn"
-                        aria-label="Compartir link de Spotify"
-                        data-share-url="https://open.spotify.com/artist/6UHhm198iprKdfDYM6poIf?si=y51wFvBURNeQi3a_nKCDkA">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <circle cx="18" cy="5" r="3"></circle>
-                            <circle cx="6" cy="12" r="3"></circle>
-                            <circle cx="18" cy="19" r="3"></circle>
-                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                        </svg>
-                    </button>
-                </div>
+.description {
+    font-size: 0.95rem;
+    color: #8a8a8a;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+}
 
-                <img src="assets/VL-logo.png" alt="Vía Luma Logo" class="logo-artist">
-            </div>
-        </section>
+.release {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
 
-        <section class="metrics">
-            <p class="metrics-text">RC: 0.72 | INR: 0.2 | LF: 0.58</p>
-        </section>
+.release-header {
+    width: 100%;
+    max-width: 480px;
+    text-align: left;
+    margin: 0 auto;
+}
 
-        <footer class="footer">
-            <a href="https://instagram.com/mimbrerecords"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="social-link"
-               aria-label="Instagram Mimbre Records">
-                @mimbrerecords
-            </a>
+.release-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    text-transform: uppercase;
+}
 
-            <p class="contact-email">
-                Contacto y verificación de artista:
-                <a href="mailto:mimbre.records@gmail.com">mimbre.records@gmail.com</a>
-            </p>
-        </footer>
+.album {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 480px;
+}
 
-    </main>
+.album-cover {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    <script src="script.js"></script>
-    <script>
-        const shareBtn = document.getElementById('share-spotify-btn');
-        if (shareBtn) {
-            shareBtn.addEventListener('click', async () => {
-                const url = shareBtn.getAttribute('data-share-url');
-                if (navigator.share) {
-                    try {
-                        await navigator.share({
-                            title: 'Vía Luma - Mimbre Records',
-                            text: 'Escucha Vía Luma en Spotify',
-                            url: url
-                        });
-                    } catch (err) {}
-                } else {
-                    try {
-                        await navigator.clipboard.writeText(url);
-                        shareBtn.setAttribute('aria-label', 'Link copiado');
-                        setTimeout(() => {
-                            shareBtn.setAttribute('aria-label', 'Compartir link de Spotify');
-                        }, 1500);
-                    } catch (err) {}
-                }
-            });
-        }
-    </script>
-</body>
-</html>
+.album-cover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.album-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+}
+
+.promo-image-wrap {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.promo-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+}
+
+.spotify-placeholder {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.placeholder-text {
+    font-size: 1rem;
+    color: #8a8a8a;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+}
+
+.spotify-embed {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.spotify-embed iframe {
+    border-radius: 12px;
+}
+
+.release-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.spotify-link {
+    background: #1DB954;
+    color: #ffffff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 24px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.spotify-link:hover {
+    background: #1ed760;
+    transform: scale(1.03);
+}
+
+.share-button {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: inherit;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.share-button:hover {
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.35);
+}
+
+.logo-artist {
+    display: block;
+    margin: 1rem auto 0;
+    max-width: 120px;
+    height: auto;
+}
+
+.metrics {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.metrics-text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #b8860b;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+}
+
+.footer {
+    width: 100%;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.social-link {
+    display: inline-block;
+    font-size: 1rem;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.social-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #d4a574;
+    color: #d4a574;
+    transform: translateY(-2px);
+}
+
+.contact-email {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.contact-email a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 40px 15px;
+        gap: 40px;
+    }
+    .logo-main {
+        width: 100px;
+    }
+    .title {
+        font-size: 2rem;
+    }
+    .subtitle {
+        font-size: 1.1rem;
+    }
+    .release-title {
+        font-size: 1.5rem;
+    }
+    .album-title {
+        font-size: 1.25rem;
+    }
+    .album {
+        max-width: 320px;
+    }
+    .promo-image-wrap,
+    .spotify-embed,
+    .release-header {
+        max-width: 320px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.75rem;
+        letter-spacing: 0.1em;
+    }
+    .subtitle {
+        font-size: 1rem;
+    }
+    .release-title {
+        font-size: 1.25rem;
+    }
+    .metrics-text {
+        font-size: 0.8rem;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header,
+.identity,
+.release,
+.metrics,
+.footer {
+    animation: fadeInUp 0.8s ease-out backwards;
+}
+
+.identity { animation-delay: 0.1s; }
+.release  { animation-delay: 0.2s; }
+.metrics  { animation-delay: 0.3s; }
+.footer   { animation-delay: 0.4s; }
